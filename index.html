@@ -9,10 +9,18 @@
 </head>
 <body>
     <div id="app">
-        <div class="generalArea" :style="{width: d + 'px', height: d + 'px'}">
-            <div class="dartArea" :style="{width: d + 'px', height: d + 'px'}"></div>
-            <div class="horizontalAxis" :style="{width: d + 'px'}"></div>
-            <div class="verticalAxis" :style="{height: d + 'px'}"></div>
+        <svg :width="initialRadius * 2" :height="initialRadius * 2">
+            <circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />
+            <circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />
+            <line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />
+            <line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />
+            <circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="4" />
+        </svg>
+        
+        <button @click="shootDart">Lancer un dart</button>
+        <pre>
+            {{ darts }}
+        </pre>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -20,8 +28,29 @@
         var app = new Vue({
             el: "#app",
             data: {
-                d: 500,
-                delta: 30
+                initialRadius:250,
+                currentRadius:250,
+                darts: []
+            },
+            methods: {
+                shootDart(){
+                    var dart = {
+                        x: Math.floor(Math.random() * this.initialRadius * 2),
+                        y: Math.floor(Math.random() * this.initialRadius * 2),
+                        id: new Date().valueOf()
+                    }
+                    dart.xRelativeToCenter = dart.x - this.initialRadius;
+                    dart.yRelativeToCenter = this.initialRadius - dart.y;
+
+                    dart.isHit = Math.sqrt(Math.pow(dart.xRelativeToCenter, 2) + Math.pow(dart.yRelativeToCenter, 2)) <= this.currentRadius
+                    this.darts.push(dart);
+                    if(dart.isHit){
+                        console.log("Good.")
+                        this.currentRadius*=0.9
+                    }else{
+                        console.log("Not good.")
+                    }
+                }
             }
         })
     </script>
