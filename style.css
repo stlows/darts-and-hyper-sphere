@@ -1,0 +1,25 @@
+#app {
+    text-align: center;
+}
+.generalArea {
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+.dartArea {
+    background-color: rgb(248, 227, 182);
+    border-radius: 50%;
+}
+.horizontalAxis,
+.verticalAxis {
+    position: absolute;
+    background-color: rgba(0,0,0,0.2);
+}
+.horizontalAxis {
+    height: 1px;
+    top: 50%;
+}
+.verticalAxis {
+    width: 1px;
+    left:50%;
+    top:0;
+}
