@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,31 @@
     <title>Darts</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="app">
+
         <svg :width="initialRadius * 2" :height="initialRadius * 2">
             <circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />
             <circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />
             <line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />
             <line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />
-            <circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="4" />
+            <circle class="dartArea current" v-if="dart.isHit" v-for="dart in darts" :cx="initialRadius"
+                :cy="initialRadius" :r="dart.currentRadius" />
+            <line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.x" :y1="dart.y"
+                :x2="initialRadius" :y2="initialRadius" />
+            <line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc"
+                :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />
+            <circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />
+
         </svg>
-        
+
         <button @click="shootDart">Lancer un dart</button>
-        <pre>
-            {{ darts }}
-        </pre>
+        <input type="number" v-model="N"><button @click="shootDartLoop">Lancer {{ N }} dart</button>
+        <p>Current radius: {{ currentRadius }}</p>
+        <p>Current score: {{ currentScore }}</p>
+        <p>Average score: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>
+        <p>Scores length: {{ scores.length }}</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -28,31 +40,78 @@
         var app = new Vue({
             el: "#app",
             data: {
-                initialRadius:250,
-                currentRadius:250,
-                darts: []
+                initialRadius: 400,
+                currentRadius: 400,
+                darts: [],
+                currentScore: 0,
+                scores: [],
+                N: 1000,
+                lastDartMissed: false
             },
             methods: {
-                shootDart(){
+                xToMath(x) {
+                    return x - this.initialRadius
+                },
+                yToMath(y) {
+                    return this.initialRadius - y
+                },
+                xToPc(x) {
+                    return this.initialRadius + x
+                },
+                yToPc(y) {
+                    return this.initialRadius - y
+                },
+                shootDart() {
+                    if (this.lastDartMissed) {
+                        this.restart()
+                    }
                     var dart = {
                         x: Math.floor(Math.random() * this.initialRadius * 2),
                         y: Math.floor(Math.random() * this.initialRadius * 2),
                         id: new Date().valueOf()
                     }
-                    dart.xRelativeToCenter = dart.x - this.initialRadius;
-                    dart.yRelativeToCenter = this.initialRadius - dart.y;
-
-                    dart.isHit = Math.sqrt(Math.pow(dart.xRelativeToCenter, 2) + Math.pow(dart.yRelativeToCenter, 2)) <= this.currentRadius
-                    this.darts.push(dart);
-                    if(dart.isHit){
-                        console.log("Good.")
-                        this.currentRadius*=0.9
-                    }else{
-                        console.log("Not good.")
+                    dart.currentRadius = this.currentRadius
+                    dart.xMath = this.xToMath(dart.x);
+                    dart.yMath = this.yToMath(dart.y);
+                    dart.norm = Math.sqrt(Math.pow(dart.xMath, 2) + Math.pow(dart.yMath, 2))
+                    dart.halfChordLength = Math.sqrt(Math.pow(this.currentRadius, 2) - Math.pow(dart.norm, 2))
+                    dart.perpVector1Normalized = {
+                        x: dart.yMath / dart.norm,
+                        y: -dart.xMath / dart.norm
+                    }
+                    dart.perpVector2Normalized = {
+                        x: -dart.yMath / dart.norm,
+                        y: dart.xMath / dart.norm
+                    }
+                    dart.perpX1Pc = this.xToPc(dart.xMath + dart.perpVector1Normalized.x * dart.halfChordLength)
+                    dart.perpY1Pc = this.yToPc(dart.yMath + dart.perpVector1Normalized.y * dart.halfChordLength)
+                    dart.perpX2Pc = this.xToPc(dart.xMath + dart.perpVector2Normalized.x * dart.halfChordLength)
+                    dart.perpY2Pc = this.yToPc(dart.yMath + dart.perpVector2Normalized.y * dart.halfChordLength)
+                    dart.isHit = dart.norm <= this.currentRadius
+                    this.darts.push(dart)
+                    this.currentScore++
+                    if (dart.isHit) {
+                        this.currentRadius = dart.halfChordLength
+                        this.lastDartMissed = false
+                    } else {
+                        this.lastDartMissed = true
+                    }
+                },
+                restart() {
+                    this.scores.push(this.currentScore)
+                    this.currentScore = 0
+                    this.currentRadius = this.initialRadius
+                    this.darts.splice(0)
+                },
+                shootDartLoop() {
+                    for (let i = 0; i < this.N; i++) {
+                        this.shootDart()
                     }
                 }
+
             }
         })
     </script>
 </body>
+
 </html>

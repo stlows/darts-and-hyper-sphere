@@ -1,20 +1,22 @@
-
 svg {
-    border: 1px solid rgba(0,0,0,0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
-.axis {
+
+.axis,
+.construction {
     stroke-width: 1px;
-    stroke: rgba(0,0,0,0.1)
+    stroke: rgba(0, 0, 0, 0.3)
 }
+
 .dartArea {
     stroke-width: 0;
-    fill: rgba(182, 205, 248, 0.5);
+    fill: rgba(182, 205, 248, 0.1);
 }
 
 .dart {
-    fill: rgba(255, 0, 0, 0.5);
+    fill: rgb(255, 0, 0);
 }
-.dart.hit {
-    fill: rgba(0, 255, 0, 0.5);
 
+.dart.hit {
+    fill: rgb(0, 255, 0);
 }
