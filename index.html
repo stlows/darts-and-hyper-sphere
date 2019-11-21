@@ -49,7 +49,7 @@
                 <h3>La Réponse</h3>
                 <p>Soit <latex eq="S"></latex> le score obtenu à une partie.</p>
                 <p>On cherche</p>
-                <latex eq="E[S]=\sum_{i=1}^nn*Pr(S=n)"></latex>
+                <latex eq="E[S]=\sum_{i=0}^\infty n*Pr(S=n)"></latex>
                 <p>Positionnons la cible dans un plan cartésien, avec le centre de celle-ci en <latex eq="(0,0)"></latex></p>
                 <p>Soient</p>
                 <ul>
@@ -67,10 +67,15 @@
                 <latex eq="Pr(S>2)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
                 <p>Intuitivement on comprend que la probabilité d'obtenir plus que 1 est la probabilité de réussir le premier coup, soit l'aire de la cible sur l'aire de la zone de jeu.</p>
                 <latex eq="Pr(S>1)=\frac{\pi r_0^2}{(2r_0)^2}=\frac{\pi}{4}"></latex>
-                <p>Par extension, la probabilité d'avoir plus que 2, sera la volume d'une hypersphère en 4D divié par le volume d'un hypercube en 4D</p>
+                <p>Par extension, la probabilité d'avoir plus que 2, sera la volume d'une hypersphère en 4D divisé par le volume d'un hypercube en 4D</p>
                 <p>Ainsi,</p>
-                <latex eq="Pr(S>n) = \frac{\text{Vol.} 2n \text{Dsphere}}{\text{Vol.} 2n \text{Dcube}}"></latex>
+                <latex eq="Pr(S>n) = \frac{\text{Vol. } 2n \text{D sphere}}{\text{Vol. } 2n \text{D cube}}"></latex>
                 <p>Heureusement, nous avons des formules pour ces hypervolumes.</p>
+                <latex eq="(\text{Vol. } 2n \text{D sphere de rayon } R)=\frac{\pi^n R^{2n}}{n!}"></latex><br>
+                <latex eq="(\text{Vol. } 2n \text{D cube de cote c})=c^{2n}"></latex>
+                <p>Revenons à notre calcul d'espérance</p>
+
+                <h3>L'analyse</h3>
             </section>
             <section class="playground">
                 <h2>Playground</h2>
