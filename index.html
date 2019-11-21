@@ -62,12 +62,15 @@
                 <p>Donc</p>
                 <latex eq="r_1=\sqrt{r_0^2-h_0^2}"></latex>
                 <p>On remarque que</p>
-                <latex eq="Pr(S>0)=1"></latex>
-                <latex eq="Pr(S>1)=Pr(h_0<r_0)=Pr(h_0^2<r_0^2)"></latex>
-                <latex eq="Pr(S>1)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
-                <p>On sait aussi que</p>
-                <latex eq="Pr(S>0) = 1"></latex>
-                <latex eq="Pr(S>1) = Pr(h_1>"></latex>
+                <latex eq="Pr(S>0)=1"></latex><br>
+                <latex eq="Pr(S>1)=Pr(h_0<r_0)=Pr(h_0^2<r_0^2)=Pr(x_0^2+y_0^2<r_0^2)"></latex><br>
+                <latex eq="Pr(S>2)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
+                <p>Intuitivement on comprend que la probabilité d'obtenir plus que 1 est la probabilité de réussir le premier coup, soit l'aire de la cible sur l'aire de la zone de jeu.</p>
+                <latex eq="Pr(S>1)=\frac{\pi r_0^2}{(2r_0)^2}=\frac{\pi}{4}"></latex>
+                <p>Par extension, la probabilité d'avoir plus que 2, sera la volume d'une hypersphère en 4D divié par le volume d'un hypercube en 4D</p>
+                <p>Ainsi,</p>
+                <latex eq="Pr(S>n) = \frac{\text{Vol.} 2n \text{Dsphere}}{\text{Vol.} 2n \text{Dcube}}"></latex>
+                <p>Heureusement, nous avons des formules pour ces hypervolumes.</p>
             </section>
             <section class="playground">
                 <h2>Playground</h2>
@@ -81,7 +84,7 @@
 
         Vue.component('latex',{
             props: ["eq"],
-            template:'<img :src="\'https://latex.codecogs.com/png.latex?\' + eq" :title="eq" />'
+            template:'<img :src="\'https://latex.codecogs.com/svg.latex?\' + eq" :title="eq" />'
         })
 
         Vue.component('cible', {
