@@ -42,8 +42,12 @@ svg {
     cursor: pointer;
 }
 .btn:hover{
-    background-color: rgba(143, 127, 231, 0.226);
+    background-color: rgb(243, 241, 255);
 }
 input {
     margin-right: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #aaa;
+    width: 100px;
 }

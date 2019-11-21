@@ -34,17 +34,19 @@
                 <div class="flex" v-for="example in examples">
                     <table>
                         <tr>
-                            <td></td>
                             <td v-for="(dart, index) in example.darts">Lancer {{ index + 1 }}</td>
                         </tr>
                         <tr>
-                            <td v-for="n in example.darts.length + 1"><cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n - 1)"></cible></td>
+                            <td v-for="n in example.darts.length"><cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n)"></cible></td>
                         </tr>
                     </table>
                     <p>{{example.label}}</p>
                 </div>
+
+                <h3>La Question</h3>
+                <p>Si un joueur lance de façon uniforme, à chaque lancer, dans le carré de jeu. Quelle est l'espérence de son score?</p>
                 
-                
+                <h3>La Réponse</h3>
             </section>
             <section class="playground">
                     <h2>Playground</h2>
@@ -71,7 +73,13 @@
                     scores: [],
                     N: 1000,
                     lastDartMissed: false,
-                    darts: []
+                    darts: [],
+                    PI: 3.14159
+                }
+            },
+            computed:{
+                currentProbability(){
+                    return Math.pow(this.currentRadius, 2) * this.PI / Math.pow(this.initialRadius * 2, 2)
                 }
             },
             created() {
@@ -145,6 +153,11 @@
             },
             template:
             '<div>'+
+                    '<template v-if="showControls">'+
+                '<br>' +
+                '<button @click="shootDart(null)" class="btn">Lancer 1 dart</button>' +
+                '<input type="number" v-model="N"><button class="btn" @click="shootDartLoop">Lancer {{ N }} darts</button>' +
+            '</template>' +
             '<svg :width="initialRadius * 2" :height="initialRadius * 2">' +
             '<circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />' +
             '<circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />' +
@@ -155,17 +168,12 @@
             '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc" :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />' +
             '<circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />' +
             '</svg>' +
-            '<template v-if="showControls">'+
-                '<br>' +
-                '<button @click="shootDart(null)" class="btn">Lancer un dart</button>' +
-                '<br>' +
-                '<input type="number" v-model="N"><button class="btn" @click="shootDartLoop">Lancer {{ N }} dart</button>' +
-            '</template>' +
             '<template v-if="showStats">' +
-                '<p>Current radius: {{ currentRadius }}</p>' +
-                '<p>Current score: {{ currentScore }}</p>' +
-                '<p>Average score: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>' +
-                '<p>Scores length: {{ scores.length }}</p>' +
+                '<p>Rayon courant: {{ Math.floor(currentRadius) }}</p>' +
+                '<p>Probabilité de frapper la cible au prochain lancer: {{ Math.floor(currentProbability * 10000) / 100 }} %</p>' +
+                '<p>Score courant: {{ currentScore }}</p>' +
+                '<p>Score moyen: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>' +
+                '<p>Nombre d\'essais: {{ scores.length }}</p>' +
             '</template>' +
             '</div>'
         })
@@ -175,9 +183,20 @@
                 examples:[
                     {
                         r: 100,
+                        darts: [{x: 10, y: 15}],
+                        label: "Le joueur rate son premier lancer, il marque 1 point."
+                    },
+                    {
+                        r: 100,
+                        darts: [{x: 50, y: 30}, {x:115,y:170}],
+                        label: "Le joueur réussit le premier lancer, la cible rétréssit et il rate le deuxième lancer. Il marque ainsi 2 points."
+                    },
+                    {
+                        r: 100,
                         darts: [{x: 120, y: 150},{x:140, y:70}, {x:45 ,y:42}],
                         label: "Le joueur marque 3 points."
-                    }
+                    },
+                    
                 ]
             }
         })
