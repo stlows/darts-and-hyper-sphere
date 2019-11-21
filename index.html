@@ -11,44 +11,44 @@
 
 <body>
     <div id="app">
-
-        <svg :width="initialRadius * 2" :height="initialRadius * 2">
-            <circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />
-            <circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />
-            <line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />
-            <line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />
-            <circle class="dartArea current" v-if="dart.isHit" v-for="dart in darts" :cx="initialRadius"
-                :cy="initialRadius" :r="dart.currentRadius" />
-            <line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.x" :y1="dart.y"
-                :x2="initialRadius" :y2="initialRadius" />
-            <line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc"
-                :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />
-            <circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />
-
-        </svg>
-
-        <button @click="shootDart">Lancer un dart</button>
-        <input type="number" v-model="N"><button @click="shootDartLoop">Lancer {{ N }} dart</button>
-        <p>Current radius: {{ currentRadius }}</p>
-        <p>Current score: {{ currentScore }}</p>
-        <p>Average score: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>
-        <p>Scores length: {{ scores.length }}</p>
+        <cible :initial-radius="50" :darts-to-shoot-on-creation="[{x: 20, y: 20}, {x: 65, y: 80}]"></cible>
+        <cible :show-stats="true" :show-controls="true"></cible>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
-        var app = new Vue({
-            el: "#app",
-            data: {
-                initialRadius: 400,
-                currentRadius: 400,
-                darts: [],
-                currentScore: 0,
-                scores: [],
-                N: 1000,
-                lastDartMissed: false
+        Vue.component('cible', {
+            props: {
+             initialRadius:{
+                 default: 400
+             },
+             dartsToShootOnCreation: { default: function(){ return [] } },
+             showControls: {default: false},
+             showStats: {default: false}
+            },
+            data() {
+                return {
+                    currentRadius: 0,
+                    currentScore: 0,
+                    scores: [],
+                    N: 1000,
+                    lastDartMissed: false,
+                    darts: []
+                }
+            },
+            created() {
+                this.restart()
+                console.log(this.dartsToShootOnCreation)
+                for(var i = 0; i < this.dartsToShootOnCreation.length; i++){
+                    this.shootDart(this.dartsToShootOnCreation[i])
+                }
             },
             methods: {
+                restart() {
+                    this.currentScore = 0
+                    this.currentRadius = this.initialRadius
+                    this.darts = []
+                },
                 xToMath(x) {
                     return x - this.initialRadius
                 },
@@ -61,13 +61,15 @@
                 yToPc(y) {
                     return this.initialRadius - y
                 },
-                shootDart() {
+                shootDart(point) {
+                    console.log(point)
                     if (this.lastDartMissed) {
+                        this.scores.push(this.currentScore)
                         this.restart()
                     }
                     var dart = {
-                        x: Math.floor(Math.random() * this.initialRadius * 2),
-                        y: Math.floor(Math.random() * this.initialRadius * 2),
+                        x: point ? point.x : Math.floor(Math.random() * this.initialRadius * 2),
+                        y: point ? point.y : Math.floor(Math.random() * this.initialRadius * 2),
                         id: new Date().valueOf()
                     }
                     dart.currentRadius = this.currentRadius
@@ -97,19 +99,38 @@
                         this.lastDartMissed = true
                     }
                 },
-                restart() {
-                    this.scores.push(this.currentScore)
-                    this.currentScore = 0
-                    this.currentRadius = this.initialRadius
-                    this.darts.splice(0)
-                },
                 shootDartLoop() {
                     for (let i = 0; i < this.N; i++) {
                         this.shootDart()
                     }
                 }
-
-            }
+            },
+            template:
+            '<div>'+
+            '<svg :width="initialRadius * 2" :height="initialRadius * 2">' +
+            '<circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />' +
+            '<circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />' +
+            '<line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />' +
+            '<line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />' +
+            '<circle class="dartArea current" v-if="dart.isHit" v-for="dart in darts" :cx="initialRadius" :cy="initialRadius" :r="dart.currentRadius" />' +
+            '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.x" :y1="dart.y" :x2="initialRadius" :y2="initialRadius" />' +
+            '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc" :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />' +
+            '<circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />' +
+            '</svg>' +
+            '<template v-if="showControls">'+
+                '<button @click="shootDart(null)">Lancer un dart</button>' +
+                '<input type="number" v-model="N"><button @click="shootDartLoop">Lancer {{ N }} dart</button>' +
+            '</template>' +
+            '<template v-if="showStats">' +
+                '<p>Current radius: {{ currentRadius }}</p>' +
+                '<p>Current score: {{ currentScore }}</p>' +
+                '<p>Average score: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>' +
+                '<p>Scores length: {{ scores.length }}</p>' +
+            '</template>' +
+            '</div>'
+        })
+        var app = new Vue({
+            el: "#app"
         })
     </script>
 </body>
