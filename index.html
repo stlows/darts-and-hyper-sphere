@@ -47,16 +47,43 @@
                 <p>Si un joueur lance de façon uniforme, à chaque lancer, dans le carré de jeu. Quelle est l'espérence de son score?</p>
                 
                 <h3>La Réponse</h3>
+                <p>Soit <latex eq="S"></latex> le score obtenu à une partie.</p>
+                <p>On cherche</p>
+                <latex eq="E[S]=\sum_{i=1}^nn*Pr(S=n)"></latex>
+                <p>Positionnons la cible dans un plan cartésien, avec le centre de celle-ci en <latex eq="(0,0)"></latex></p>
+                <p>Soient</p>
+                <ul>
+                    <li><latex eq="r_i"></latex> le rayon courant</li>
+                    <li><latex eq="h_i"></latex> le rayon de la prochaine manche sachant qu'on a frappé la cible</li>
+                    <li><latex eq="(x_i,y_i)"></latex> les coordonnées du dart</li>
+                </ul>
+                <p>On a</p>
+                <latex eq="h_i=\sqrt{x_i^2+y_i^2}"></latex>
+                <p>Donc</p>
+                <latex eq="r_1=\sqrt{r_0^2-h_0^2}"></latex>
+                <p>On remarque que</p>
+                <latex eq="Pr(S>0)=1"></latex>
+                <latex eq="Pr(S>1)=Pr(h_0<r_0)=Pr(h_0^2<r_0^2)"></latex>
+                <latex eq="Pr(S>1)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
+                <p>On sait aussi que</p>
+                <latex eq="Pr(S>0) = 1"></latex>
+                <latex eq="Pr(S>1) = Pr(h_1>"></latex>
             </section>
             <section class="playground">
-                    <h2>Playground</h2>
-                    <cible :show-stats="true" :show-controls="true"></cible>
-                </section>
+                <h2>Playground</h2>
+                <cible :show-stats="true" :show-controls="true"></cible>
+            </section>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
+
+        Vue.component('latex',{
+            props: ["eq"],
+            template:'<img :src="\'https://latex.codecogs.com/png.latex?\' + eq" :title="eq" />'
+        })
+
         Vue.component('cible', {
             props: {
              initialRadius:{
@@ -84,7 +111,6 @@
             },
             created() {
                 this.restart()
-                console.log(this.dartsToShootOnCreation)
                 for(var i = 0; i < this.dartsToShootOnCreation.length; i++){
                     this.shootDart(this.dartsToShootOnCreation[i])
                 }
@@ -108,7 +134,6 @@
                     return this.initialRadius - y
                 },
                 shootDart(point) {
-                    console.log(point)
                     if (this.lastDartMissed) {
                         this.scores.push(this.currentScore)
                         this.restart()
