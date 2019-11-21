@@ -11,8 +11,46 @@
 
 <body>
     <div id="app">
-        <cible :initial-radius="50" :darts-to-shoot-on-creation="[{x: 20, y: 20}, {x: 65, y: 80}]"></cible>
-        <cible :show-stats="true" :show-controls="true"></cible>
+        <div class="flex">
+            
+            <section class="definition">
+                <h2>Mise en place</h2>
+                <p>Soit une cible en forme de cercle, contenu dans un carré.</p>
+                <cible :initial-radius="100"></cible>
+                <h3>Règles du jeu</h3>
+                <ol>
+                    <li>Un joueur lance un dart sur la cible.</li>
+                    <li>2 cas sont possibles
+                        <ol>
+                            <li>Si le joueur frappe la cible, on trace ainsi une ligne entre le point d'impact et le centre de la cible. On calcule ensuite la longueur du segment de corde perpendicualaire. Cette longueur sera le nouveau diamètre de la cible pour la prochaine ronde et on reprend à l'étape 1.
+                            </li>
+                            <li>Si le joueur ne frappe pas la cible, le jeu s'arrête et le joueur score le nombre de points égal au nombre de flèche qu'il a lancé.
+
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+                <h3>Exemples</h3>
+                <div class="flex" v-for="example in examples">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td v-for="(dart, index) in example.darts">Lancer {{ index + 1 }}</td>
+                        </tr>
+                        <tr>
+                            <td v-for="n in example.darts.length + 1"><cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n - 1)"></cible></td>
+                        </tr>
+                    </table>
+                    <p>{{example.label}}</p>
+                </div>
+                
+                
+            </section>
+            <section class="playground">
+                    <h2>Playground</h2>
+                    <cible :show-stats="true" :show-controls="true"></cible>
+                </section>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -112,14 +150,16 @@
             '<circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />' +
             '<line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />' +
             '<line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />' +
-            '<circle class="dartArea current" v-if="dart.isHit" v-for="dart in darts" :cx="initialRadius" :cy="initialRadius" :r="dart.currentRadius" />' +
+            '<circle class="dartArea current" v-if="dart.isHit && i > 0" v-for="(dart, i) in darts" :cx="initialRadius" :cy="initialRadius" :r="dart.currentRadius" />' +
             '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.x" :y1="dart.y" :x2="initialRadius" :y2="initialRadius" />' +
             '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc" :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />' +
             '<circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />' +
             '</svg>' +
             '<template v-if="showControls">'+
-                '<button @click="shootDart(null)">Lancer un dart</button>' +
-                '<input type="number" v-model="N"><button @click="shootDartLoop">Lancer {{ N }} dart</button>' +
+                '<br>' +
+                '<button @click="shootDart(null)" class="btn">Lancer un dart</button>' +
+                '<br>' +
+                '<input type="number" v-model="N"><button class="btn" @click="shootDartLoop">Lancer {{ N }} dart</button>' +
             '</template>' +
             '<template v-if="showStats">' +
                 '<p>Current radius: {{ currentRadius }}</p>' +
@@ -130,7 +170,16 @@
             '</div>'
         })
         var app = new Vue({
-            el: "#app"
+            el: "#app",
+            data: {
+                examples:[
+                    {
+                        r: 100,
+                        darts: [{x: 120, y: 150},{x:140, y:70}, {x:45 ,y:42}],
+                        label: "Le joueur marque 3 points."
+                    }
+                ]
+            }
         })
     </script>
 </body>
