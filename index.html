@@ -1,239 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Darts</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <div class="flex">
-            
-            <section class="definition">
-                <h2>Mise en place</h2>
-                <p>Soit une cible en forme de cercle, contenu dans un carré.</p>
-                <cible :initial-radius="100"></cible>
-                <h3>Règles du jeu</h3>
+      <div class="content" id="top">
+        <div class="links">
+            <a href="#mise-en-place">Mise en place</a>
+            <a href="#regles">Règles du jeu</a>
+            <a href="#exemples">Exemples</a>
+            <a href="#question">Question</a>
+            <a href="#reponse">Réponse</a>
+            <a href="#analyse">Analyse</a>
+            <a href="#simulation">Simulation</a>
+        </div>
+        <a id="goToTop" href="#top">Top ↑</a>
+        <section id="mise-en-place">
+          <h2 >Mise en place</h2>
+          <p>Soit une cible en forme de cercle, contenu dans un carré.</p>
+          <cible :initial-radius="100"></cible>
+        </section>
+        <section id="regles">
+            <h2>Règles du jeu</h3>
+            <ol>
+                <li>Un joueur lance un dart sur la cible.</li>
+                <li>
+                2 cas sont possibles
                 <ol>
-                    <li>Un joueur lance un dart sur la cible.</li>
-                    <li>2 cas sont possibles
-                        <ol>
-                            <li>Si le joueur frappe la cible, on trace ainsi une ligne entre le point d'impact et le centre de la cible. On calcule ensuite la longueur du segment de corde perpendicualaire. Cette longueur sera le nouveau diamètre de la cible pour la prochaine ronde et on reprend à l'étape 1.
-                            </li>
-                            <li>Si le joueur ne frappe pas la cible, le jeu s'arrête et le joueur score le nombre de points égal au nombre de flèche qu'il a lancé.
-
-                            </li>
-                        </ol>
+                    <li>
+                    Si le joueur frappe la cible, on trace ainsi une ligne entre le point d'impact et le centre de la cible. On calcule ensuite la
+                    longueur du segment de corde perpendicualaire. Cette longueur sera le nouveau diamètre de la cible pour la prochaine ronde et on
+                    reprend à l'étape 1.
+                    </li>
+                    <li>
+                    Si le joueur ne frappe pas la cible, le jeu s'arrête et le joueur score le nombre de points égal au nombre de flèche qu'il a lancé.
                     </li>
                 </ol>
-                <h3>Exemples</h3>
-                <div class="flex" v-for="example in examples">
+                </li>
+            </ol>
+        </section>
+          <section id="exemples">
+                <h2>Exemples</h2>
+                <div v-for="example in examples">
+                  <p>{{example.label}}</p>
+      
+                  <div class="flex">
                     <table>
-                        <tr>
-                            <td v-for="(dart, index) in example.darts">Lancer {{ index + 1 }}</td>
-                        </tr>
-                        <tr>
-                            <td v-for="n in example.darts.length"><cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n)"></cible></td>
-                        </tr>
+                      <tr>
+                        <td v-for="n in example.darts.length">
+                          <cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n)"></cible>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td v-for="(dart, index) in example.darts"><i>Lancer {{ index + 1 }}</i></td>
+                      </tr>
                     </table>
-                    <p>{{example.label}}</p>
+                  </div>
+                  <hr style="opacity: 0.2;" />
                 </div>
-
-                <h3>La Question</h3>
-                <p>Si un joueur lance de façon uniforme, à chaque lancer, dans le carré de jeu. Quelle est l'espérence de son score?</p>
+          </section>
+          <section id="question">
+                <h2>La Question</h2>
+                <p>Si un joueur lance aléatoirement de façon uniforme, à chaque lancer, dans le carré de jeu. Quelle est l'espérence de son score?</p>
                 
-                <h3>La Réponse</h3>
-                <p>Soit <latex eq="S"></latex> le score obtenu à une partie.</p>
-                <p>On cherche</p>
-                <latex eq="E[S]=\sum_{i=0}^\infty n*Pr(S=n)"></latex>
-                <p>Positionnons la cible dans un plan cartésien, avec le centre de celle-ci en <latex eq="(0,0)"></latex></p>
+          </section>
+        <section id="reponse">
+                <h2>La Réponse</h2>
+                <p>Soit <latex eq="S"></latex> le score obtenu.</p>
+                <p>On s'interesse à</p>
+                <latex eq="E[S]=\sum_{n=0}^\infty n*Pr(S=n)"></latex>
+                <p>Positionnons la cible dans un plan cartésien, avec le centre de celle-ci à l'origine <latex eq="(0,0)"></latex></p>
                 <p>Soient</p>
                 <ul>
                     <li><latex eq="r_i"></latex> le rayon courant</li>
                     <li><latex eq="h_i"></latex> le rayon de la prochaine manche sachant qu'on a frappé la cible</li>
                     <li><latex eq="(x_i,y_i)"></latex> les coordonnées du dart</li>
                 </ul>
-                <p>On a</p>
+                <p>Par pyhtagore, on a</p>
                 <latex eq="h_i=\sqrt{x_i^2+y_i^2}"></latex>
-                <p>Donc</p>
-                <latex eq="r_1=\sqrt{r_0^2-h_0^2}"></latex>
+                <p>On notera aussi la formule suivante</p>
+                <latex eq="Pr(S>n)=Pr(h_{n-1}<r_{n-1})=Pr(h_{n-1}^2<r_{n-1}^2)"></latex>
                 <p>On remarque que</p>
-                <latex eq="Pr(S>0)=1"></latex><br>
-                <latex eq="Pr(S>1)=Pr(h_0<r_0)=Pr(h_0^2<r_0^2)=Pr(x_0^2+y_0^2<r_0^2)"></latex><br>
-                <latex eq="Pr(S>2)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
-                <p>Intuitivement on comprend que la probabilité d'obtenir plus que 1 est la probabilité de réussir le premier coup, soit l'aire de la cible sur l'aire de la zone de jeu.</p>
+                <latex eq="Pr(S>1)=Pr(h_0<r_0)=Pr(h_0^2<r_0^2)=Pr(x_0^2+y_0^2<r_0^2)"></latex><br/>
+                <p><strong>Intuitivement</strong> on comprend que la probabilité d'obtenir plus que 1 est la probabilité de réussir le premier lancer, soit <strong>l'aire de la cible sur l'aire de la zone de jeu</strong>.</p>
+                <p>Autrement dit</p>
                 <latex eq="Pr(S>1)=\frac{\pi r_0^2}{(2r_0)^2}=\frac{\pi}{4}"></latex>
+                <p>Si nous poursuivons ce raisonnement, et en remarquant que <latex eq="r_1=\sqrt{r_0^2-h_0^2}"></latex> on obtient</p>
+                <latex eq="Pr(S>2)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
                 <p>Par extension, la probabilité d'avoir plus que 2, sera la volume d'une hypersphère en 4D divisé par le volume d'un hypercube en 4D</p>
                 <p>Ainsi,</p>
                 <latex eq="Pr(S>n) = \frac{\text{Vol. } 2n \text{D sphere}}{\text{Vol. } 2n \text{D cube}}"></latex>
                 <p>Heureusement, nous avons des formules pour ces hypervolumes.</p>
-                <latex eq="(\text{Vol. } 2n \text{D sphere de rayon } R)=\frac{\pi^n R^{2n}}{n!}"></latex><br>
-                <latex eq="(\text{Vol. } 2n \text{D cube de cote c})=c^{2n}"></latex>
+                <latex eq="(\text{Vol. } 2n \text{D sphere de rayon } r_0)=\frac{\pi^n r_0^{2n}}{n!}"></latex><br />
+                <latex eq="(\text{Vol. } 2n \text{D cube de cote 2}r_0)=(2r_0)^{2n}=4^nr_0^{2n}" bordered></latex>
+                <p>Et donc,</p>
+                <latex eq="Pr(S>n) = \frac{\pi^n r_0^{2n}}{n!}*\frac{1}{4^nr_0^{2n}}=\frac{\left(\frac{\pi}{4}\right)^n}{n!}"></latex>
+                <p>Ceux d'entre vous qui ont déjà fait des mathématiques, sont assez familiers avec le terme <latex eq="\frac{x^n}{n!}"></latex></p>
+                <p>Je sens votre fébrilité, nous y reviendrons bientôt...</p>
+                <p>On ajoutera aussi que</p>
+                <latex eq="Pr(S=n) = Pr(S>n-1) - Pr(S>n)"></latex>
                 <p>Revenons à notre calcul d'espérance</p>
-
-                <h3>L'analyse</h3>
-            </section>
-            <section class="playground">
-                <h2>Playground</h2>
-                <cible :show-stats="true" :show-controls="true"></cible>
-            </section>
-        </div>
+                <latex eq="E[S]=\sum_{n=0}^\infty n*Pr(S=n)"></latex><br>
+                <latex eq="=\sum_{n=1}^\infty n*Pr(S>n-1) - \sum_{n=1}^\infty n*Pr(S>n)"></latex><br>
+                <latex eq="=Pr(S>0) + 2Pr(S>1) + ... - Pr(S>1) - 2Pr(S>2) - ..."></latex><br>
+                <latex eq="=\sum_{n=0}^\infty Pr(S>n)"></latex><br>
+                <latex eq="=\sum_{n=0}^\infty \frac{\left(\frac{\pi}{4}\right)^n}{n!}"></latex><br>
+                <p>Wow ! On a finalement notre réponse</p>
+                <latex eq="E[S] = e^{\pi/4}" :big="true"></latex>
+        </section>
+        <section id="analyse">
+            <h2>L'analyse</h2>
+            <p>Il est très interessant de voir qu'un problème géométrique en 2D, peut être résolu avec des formules de volumes en dimensions supérieures.</p>
+            <p>Aussi intéressant de noter que le ratio du volume d'une hypersphère par rapport à son hypercube tend vers 0.</p>
+            <p>ie, plus la dimension augmente plus la "sphère" devient petite par rapport au cube.</p>
+        </section>
+        <section id="simulation">
+          <h2>La simulation</h2>
+          <p>Utiliser la simulation ci-bas pour essayer de jouer au jeu.</p>
+          <p>Aussi observez que plus le nombre d'essais augmentera, plus le score moyen devrait tendre vers <latex eq="e^{\pi/4}\approx 2.19328"></latex></p>
+          <cible :show-stats="true" :show-controls="true"></cible>
+        </section>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
+      Vue.component("latex", {
+        props: ["eq", "big"],
+        template: '<img :height="big ? \'40px\' : \'100%\'" :src="\'https://latex.codecogs.com/svg.latex?\' + eq" :title="eq" />'
+      });
 
-        Vue.component('latex',{
-            props: ["eq"],
-            template:'<img :src="\'https://latex.codecogs.com/svg.latex?\' + eq" :title="eq" />'
-        })
-
-        Vue.component('cible', {
-            props: {
-             initialRadius:{
-                 default: 400
-             },
-             dartsToShootOnCreation: { default: function(){ return [] } },
-             showControls: {default: false},
-             showStats: {default: false}
-            },
-            data() {
-                return {
-                    currentRadius: 0,
-                    currentScore: 0,
-                    scores: [],
-                    N: 1000,
-                    lastDartMissed: false,
-                    darts: [],
-                    PI: 3.14159
-                }
-            },
-            computed:{
-                currentProbability(){
-                    return Math.pow(this.currentRadius, 2) * this.PI / Math.pow(this.initialRadius * 2, 2)
-                }
-            },
-            created() {
-                this.restart()
-                for(var i = 0; i < this.dartsToShootOnCreation.length; i++){
-                    this.shootDart(this.dartsToShootOnCreation[i])
-                }
-            },
-            methods: {
-                restart() {
-                    this.currentScore = 0
-                    this.currentRadius = this.initialRadius
-                    this.darts = []
-                },
-                xToMath(x) {
-                    return x - this.initialRadius
-                },
-                yToMath(y) {
-                    return this.initialRadius - y
-                },
-                xToPc(x) {
-                    return this.initialRadius + x
-                },
-                yToPc(y) {
-                    return this.initialRadius - y
-                },
-                shootDart(point) {
-                    if (this.lastDartMissed) {
-                        this.scores.push(this.currentScore)
-                        this.restart()
-                    }
-                    var dart = {
-                        x: point ? point.x : Math.floor(Math.random() * this.initialRadius * 2),
-                        y: point ? point.y : Math.floor(Math.random() * this.initialRadius * 2),
-                        id: new Date().valueOf()
-                    }
-                    dart.currentRadius = this.currentRadius
-                    dart.xMath = this.xToMath(dart.x);
-                    dart.yMath = this.yToMath(dart.y);
-                    dart.norm = Math.sqrt(Math.pow(dart.xMath, 2) + Math.pow(dart.yMath, 2))
-                    dart.halfChordLength = Math.sqrt(Math.pow(this.currentRadius, 2) - Math.pow(dart.norm, 2))
-                    dart.perpVector1Normalized = {
-                        x: dart.yMath / dart.norm,
-                        y: -dart.xMath / dart.norm
-                    }
-                    dart.perpVector2Normalized = {
-                        x: -dart.yMath / dart.norm,
-                        y: dart.xMath / dart.norm
-                    }
-                    dart.perpX1Pc = this.xToPc(dart.xMath + dart.perpVector1Normalized.x * dart.halfChordLength)
-                    dart.perpY1Pc = this.yToPc(dart.yMath + dart.perpVector1Normalized.y * dart.halfChordLength)
-                    dart.perpX2Pc = this.xToPc(dart.xMath + dart.perpVector2Normalized.x * dart.halfChordLength)
-                    dart.perpY2Pc = this.yToPc(dart.yMath + dart.perpVector2Normalized.y * dart.halfChordLength)
-                    dart.isHit = dart.norm <= this.currentRadius
-                    this.darts.push(dart)
-                    this.currentScore++
-                    if (dart.isHit) {
-                        this.currentRadius = dart.halfChordLength
-                        this.lastDartMissed = false
-                    } else {
-                        this.lastDartMissed = true
-                    }
-                },
-                shootDartLoop() {
-                    for (let i = 0; i < this.N; i++) {
-                        this.shootDart()
-                    }
-                }
-            },
-            template:
-            '<div>'+
-                    '<template v-if="showControls">'+
-                '<br>' +
-                '<button @click="shootDart(null)" class="btn">Lancer 1 dart</button>' +
-                '<input type="number" v-model="N"><button class="btn" @click="shootDartLoop">Lancer {{ N }} darts</button>' +
-            '</template>' +
-            '<svg :width="initialRadius * 2" :height="initialRadius * 2">' +
-            '<circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />' +
-            '<circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />' +
-            '<line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />' +
-            '<line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />' +
-            '<circle class="dartArea current" v-if="dart.isHit && i > 0" v-for="(dart, i) in darts" :cx="initialRadius" :cy="initialRadius" :r="dart.currentRadius" />' +
-            '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.x" :y1="dart.y" :x2="initialRadius" :y2="initialRadius" />' +
-            '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc" :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />' +
-            '<circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />' +
-            '</svg>' +
-            '<template v-if="showStats">' +
-                '<p>Rayon courant: {{ Math.floor(currentRadius) }}</p>' +
-                '<p>Probabilité de frapper la cible au prochain lancer: {{ Math.floor(currentProbability * 10000) / 100 }} %</p>' +
-                '<p>Score courant: {{ currentScore }}</p>' +
-                '<p>Score moyen: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>' +
-                '<p>Nombre d\'essais: {{ scores.length }}</p>' +
-            '</template>' +
-            '</div>'
-        })
-        var app = new Vue({
-            el: "#app",
-            data: {
-                examples:[
-                    {
-                        r: 100,
-                        darts: [{x: 10, y: 15}],
-                        label: "Le joueur rate son premier lancer, il marque 1 point."
-                    },
-                    {
-                        r: 100,
-                        darts: [{x: 50, y: 30}, {x:115,y:170}],
-                        label: "Le joueur réussit le premier lancer, la cible rétréssit et il rate le deuxième lancer. Il marque ainsi 2 points."
-                    },
-                    {
-                        r: 100,
-                        darts: [{x: 120, y: 150},{x:140, y:70}, {x:45 ,y:42}],
-                        label: "Le joueur marque 3 points."
-                    },
-                    
-                ]
+      Vue.component("cible", {
+        props: {
+          initialRadius: {
+            default: 300
+          },
+          dartsToShootOnCreation: {
+            default: function() {
+              return [];
             }
-        })
+          },
+          showControls: { default: false },
+          showStats: { default: false }
+        },
+        data() {
+          return {
+            currentRadius: 0,
+            currentScore: 0,
+            scores: [],
+            groupedScores:[],
+            lastDartMissed: false,
+            darts: [],
+            PI: 3.14159
+          };
+        },
+        computed: {
+          currentProbability() {
+            return (Math.pow(this.currentRadius, 2) * this.PI) / Math.pow(this.initialRadius * 2, 2);
+          }
+        },
+        created() {
+          this.restart();
+          for (var i = 0; i < this.dartsToShootOnCreation.length; i++) {
+            this.shootDart(this.dartsToShootOnCreation[i]);
+          }
+          for(var i = 0; i < 10; i++){
+              this.groupedScores.push(0)
+          }
+        },
+        methods: {
+          restart() {
+            this.currentScore = 0;
+            this.currentRadius = this.initialRadius;
+            this.darts = [];
+          },
+          xToMath(x) {
+            return x - this.initialRadius;
+          },
+          yToMath(y) {
+            return this.initialRadius - y;
+          },
+          xToPc(x) {
+            return this.initialRadius + x;
+          },
+          yToPc(y) {
+            return this.initialRadius - y;
+          },
+          shootDart(point) {
+            if (this.lastDartMissed) {
+              this.scores.push(this.currentScore);
+              this.groupedScores[this.currentScore]++
+              this.restart();
+            }
+            var dart = {
+              x: point ? point.x : Math.floor(Math.random() * this.initialRadius * 2),
+              y: point ? point.y : Math.floor(Math.random() * this.initialRadius * 2),
+              id: new Date().valueOf()
+            };
+            dart.currentRadius = this.currentRadius;
+            dart.xMath = this.xToMath(dart.x);
+            dart.yMath = this.yToMath(dart.y);
+            dart.norm = Math.sqrt(Math.pow(dart.xMath, 2) + Math.pow(dart.yMath, 2));
+            dart.halfChordLength = Math.sqrt(Math.pow(this.currentRadius, 2) - Math.pow(dart.norm, 2));
+            dart.perpVector1Normalized = {
+              x: dart.yMath / dart.norm,
+              y: -dart.xMath / dart.norm
+            };
+            dart.perpVector2Normalized = {
+              x: -dart.yMath / dart.norm,
+              y: dart.xMath / dart.norm
+            };
+            dart.perpX1Pc = this.xToPc(dart.xMath + dart.perpVector1Normalized.x * dart.halfChordLength);
+            dart.perpY1Pc = this.yToPc(dart.yMath + dart.perpVector1Normalized.y * dart.halfChordLength);
+            dart.perpX2Pc = this.xToPc(dart.xMath + dart.perpVector2Normalized.x * dart.halfChordLength);
+            dart.perpY2Pc = this.yToPc(dart.yMath + dart.perpVector2Normalized.y * dart.halfChordLength);
+            dart.isHit = dart.norm <= this.currentRadius;
+            this.darts.push(dart);
+            this.currentScore++;
+            if (dart.isHit) {
+              this.currentRadius = dart.halfChordLength;
+              this.lastDartMissed = false;
+            } else {
+              this.lastDartMissed = true;
+            }
+          },
+          shootDartLoop(n) {
+            for (let i = 0; i < n; i++) {
+              this.shootDart();
+            }
+          }
+        },
+        template:
+          "<div>" +
+          '<div v-if="showControls">' +
+          '<button v-for="n in [1,1000,10000,100000]" @click="shootDartLoop(n)" class="btn">Lancer {{n}} dart</button>' +
+          "</div>" +
+          "<div class='flex flex-center'>" +
+          '<svg :width="initialRadius * 2" :height="initialRadius * 2">' +
+          '<circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />' +
+          '<circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />' +
+          '<line class="axis horizontal" :x1="initialRadius" :y1="0" :x2="initialRadius" :y2="initialRadius * 2" />' +
+          '<line class="axis vertical" :x1="0" :y1="initialRadius" :x2="initialRadius * 2" :y2="initialRadius" />' +
+          '<circle class="dartArea current" v-if="dart.isHit && i > 0" v-for="(dart, i) in darts" :cx="initialRadius" :cy="initialRadius" :r="dart.currentRadius" />' +
+          '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.x" :y1="dart.y" :x2="initialRadius" :y2="initialRadius" />' +
+          '<line class="construction" v-if="dart.isHit" v-for="dart in darts" :x1="dart.perpX1Pc" :y1="dart.perpY1Pc" :x2="dart.perpX2Pc" :y2="dart.perpY2Pc" />' +
+          '<circle class="dart" :class="{hit: dart.isHit}" v-for="dart in darts" :cx="dart.x" :cy="dart.y" :r="3" />' +
+          "</svg>" +
+          '<div v-if="showStats" style="text-align:center; padding: 30px">' +
+          "<p>Rayon courant: {{ Math.floor(currentRadius) }}</p>" +
+          "<p>Probabilité de frapper la cible au prochain lancer: {{ Math.floor(currentProbability * 10000) / 100 }} %</p>" +
+          "<p>Score courant: {{ currentScore }}</p>" +
+          "<p>Score moyen: {{ scores.reduce((acc, curr) => acc + curr, 0) / scores.length }}</p>" +
+          "<table class='scores' border='1'>" +
+            "<tr>" +
+                "<td>Score</td>" +
+                "<td>Occurence</td>" +
+            "</tr>"+
+            "<tr v-for='(count, index) in groupedScores'>" +
+                "<td>{{index}}</td>" +
+                "<td>{{count}}</td>" +
+            "</tr>"+
+            "<tr>" +
+                "<td>Total</td>" +
+                "<td>{{groupedScores.reduce((acc, curr) => acc + curr, 0)}}</td>" +
+            "</tr>"+
+          "</table>"+
+          "</div>" +
+          "</div>" +
+          "</div>"
+      });
+      var app = new Vue({
+        el: "#app",
+        data: {
+          examples: [
+            {
+              r: 100,
+              darts: [{ x: 10, y: 15 }],
+              label: "Le joueur rate son premier lancer, il marque 1 point."
+            },
+            {
+              r: 100,
+              darts: [
+                { x: 50, y: 30 },
+                { x: 115, y: 170 }
+              ],
+              label: "Le joueur réussit le premier lancer, la cible rétréssit et il rate le deuxième lancer. Il marque ainsi 2 points."
+            },
+            {
+              r: 100,
+              darts: [
+                { x: 120, y: 150 },
+                { x: 140, y: 70 },
+                { x: 45, y: 42 }
+              ],
+              label: "Le joueur marque 3 points."
+            }
+          ]
+        }
+      });
     </script>
-</body>
-
+  </body>
 </html>
