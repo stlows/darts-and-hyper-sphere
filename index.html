@@ -23,7 +23,7 @@
         <a id="goToTop" href="#top">Top ↑</a>
         <section id="mise-en-place">
           <h2 >Mise en place</h2>
-          <p>Soit une cible en forme de cercle, contenu dans un carré.</p>
+          <p>Soit une cible en forme de cercle, contenue dans un carré.</p>
           <cible :initial-radius="100"></cible>
         </section>
         <section id="regles">
@@ -32,14 +32,14 @@
                 <li>Un joueur lance un dart sur la cible.</li>
                 <li>
                 2 cas sont possibles
-                <ol>
+                <ol type="a">
                     <li>
                     Si le joueur frappe la cible, on trace ainsi une ligne entre le point d'impact et le centre de la cible. On calcule ensuite la
                     longueur du segment de corde perpendicualaire. Cette longueur sera le nouveau diamètre de la cible pour la prochaine ronde et on
                     reprend à l'étape 1.
                     </li>
                     <li>
-                    Si le joueur ne frappe pas la cible, le jeu s'arrête et le joueur score le nombre de points égal au nombre de flèche qu'il a lancé.
+                    Si le joueur ne frappe pas la cible, le jeu s'arrête et le joueur score le nombre de points égal au nombre de flèches qu'il a lancées.
                     </li>
                 </ol>
                 </li>
@@ -62,12 +62,12 @@
                       </tr>
                     </table>
                   </div>
-                  <hr style="opacity: 0.2;" />
+                  <hr style="opacity: 0.5;" />
                 </div>
           </section>
           <section id="question">
                 <h2>La Question</h2>
-                <p>Si un joueur lance aléatoirement de façon uniforme, à chaque lancer, dans le carré de jeu. Quelle est l'espérence de son score?</p>
+                <p>Si, à chaque lancer, un joueur lance aléatoirement et de façon uniforme dans le carré de jeu, quelle est l'espérance de son score?</p>
                 
           </section>
         <section id="reponse">
@@ -79,10 +79,10 @@
                 <p>Soient</p>
                 <ul>
                     <li><latex eq="r_i"></latex> le rayon courant</li>
-                    <li><latex eq="h_i"></latex> le rayon de la prochaine manche sachant qu'on a frappé la cible</li>
                     <li><latex eq="(x_i,y_i)"></latex> les coordonnées du dart</li>
+                    <li><latex eq="h_i"></latex> la distance entre le dart et l'origine</li>
                 </ul>
-                <p>Par pyhtagore, on a</p>
+                <p>Par Pythagore, on a</p>
                 <latex eq="h_i=\sqrt{x_i^2+y_i^2}"></latex>
                 <p>On notera aussi la formule suivante</p>
                 <latex eq="Pr(S>n)=Pr(h_{n-1}<r_{n-1})=Pr(h_{n-1}^2<r_{n-1}^2)"></latex>
@@ -111,8 +111,8 @@
                 <latex eq="=Pr(S>0) + 2Pr(S>1) + ... - Pr(S>1) - 2Pr(S>2) - ..."></latex><br>
                 <latex eq="=\sum_{n=0}^\infty Pr(S>n)"></latex><br>
                 <latex eq="=\sum_{n=0}^\infty \frac{\left(\frac{\pi}{4}\right)^n}{n!}"></latex><br>
-                <p>Wow ! On a finalement notre réponse</p>
-                <latex eq="E[S] = e^{\pi/4}" :big="true"></latex>
+                <p>Wow! On a finalement notre réponse</p>
+                <latex eq="E[S]=e^{\pi/4}" :big="true"></latex>
         </section>
         <section id="analyse">
             <h2>L'analyse</h2>
@@ -139,7 +139,7 @@
       Vue.component("cible", {
         props: {
           initialRadius: {
-            default: 300
+            default: 250
           },
           dartsToShootOnCreation: {
             default: function() {
