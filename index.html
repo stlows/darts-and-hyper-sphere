@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<<<<<<< HEAD
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,126 +20,6 @@
         <a href="#reponse">Réponse</a>
         <a href="#analyse">Analyse</a>
         <a href="#simulation">Simulation</a>
-=======
-  <body>
-    <div id="app">
-      <div class="content" id="top">
-        <div class="links">
-            <a href="#mise-en-place">Mise en place</a>
-            <a href="#regles">Règles du jeu</a>
-            <a href="#exemples">Exemples</a>
-            <a href="#question">Question</a>
-            <a href="#reponse">Réponse</a>
-            <a href="#analyse">Analyse</a>
-            <a href="#simulation">Simulation</a>
-        </div>
-        <a id="goToTop" href="#top">Top ↑</a>
-        <section id="mise-en-place">
-          <h2 >Mise en place</h2>
-          <p>Soit une cible en forme de cercle, contenue dans un carré.</p>
-          <cible :initial-radius="100"></cible>
-        </section>
-        <section id="regles">
-            <h2>Règles du jeu</h3>
-            <ol>
-                <li>Un joueur lance un dart sur la cible.</li>
-                <li>
-                2 cas sont possibles
-                <ol type="a">
-                    <li>
-                    Si le joueur frappe la cible, on trace ainsi une ligne entre le point d'impact et le centre de la cible. On calcule ensuite la
-                    longueur du segment de corde perpendicualaire. Cette longueur sera le nouveau diamètre de la cible pour la prochaine ronde et on
-                    reprend à l'étape 1.
-                    </li>
-                    <li>
-                    Si le joueur ne frappe pas la cible, le jeu s'arrête et le joueur score le nombre de points égal au nombre de flèches qu'il a lancées.
-                    </li>
-                </ol>
-                </li>
-            </ol>
-        </section>
-          <section id="exemples">
-                <h2>Exemples</h2>
-                <div v-for="example in examples">
-                  <p>{{example.label}}</p>
-      
-                  <div class="flex">
-                    <table>
-                      <tr>
-                        <td v-for="n in example.darts.length">
-                          <cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n)"></cible>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td v-for="(dart, index) in example.darts"><i>Lancer {{ index + 1 }}</i></td>
-                      </tr>
-                    </table>
-                  </div>
-                  <hr style="opacity: 0.5;" />
-                </div>
-          </section>
-          <section id="question">
-                <h2>La Question</h2>
-                <p>Si, à chaque lancer, un joueur lance aléatoirement et de façon uniforme dans le carré de jeu, quelle est l'espérance de son score?</p>
-                
-          </section>
-        <section id="reponse">
-                <h2>La Réponse</h2>
-                <p>Soit <latex eq="S"></latex> le score obtenu.</p>
-                <p>On s'interesse à</p>
-                <latex eq="E[S]=\sum_{n=0}^\infty n*Pr(S=n)"></latex>
-                <p>Positionnons la cible dans un plan cartésien, avec le centre de celle-ci à l'origine <latex eq="(0,0)"></latex></p>
-                <p>Soient</p>
-                <ul>
-                    <li><latex eq="r_i"></latex> le rayon courant</li>
-                    <li><latex eq="(x_i,y_i)"></latex> les coordonnées du dart</li>
-                    <li><latex eq="h_i"></latex> la distance entre le dart et l'origine</li>
-                </ul>
-                <p>Par Pythagore, on a</p>
-                <latex eq="h_i=\sqrt{x_i^2+y_i^2}"></latex>
-                <p>On notera aussi la formule suivante</p>
-                <latex eq="Pr(S>n)=Pr(h_{n-1}<r_{n-1})=Pr(h_{n-1}^2<r_{n-1}^2)"></latex>
-                <p>On remarque que</p>
-                <latex eq="Pr(S>1)=Pr(h_0<r_0)=Pr(h_0^2<r_0^2)=Pr(x_0^2+y_0^2<r_0^2)"></latex><br/>
-                <p><strong>Intuitivement</strong> on comprend que la probabilité d'obtenir plus que 1 est la probabilité de réussir le premier lancer, soit <strong>l'aire de la cible sur l'aire de la zone de jeu</strong>.</p>
-                <p>Autrement dit</p>
-                <latex eq="Pr(S>1)=\frac{\pi r_0^2}{(2r_0)^2}=\frac{\pi}{4}"></latex>
-                <p>Si nous poursuivons ce raisonnement, et en remarquant que <latex eq="r_1=\sqrt{r_0^2-h_0^2}"></latex> on obtient</p>
-                <latex eq="Pr(S>2)=Pr(h_1<r_1)=Pr(h_1^2<r_1^2)=Pr(x_1^2+y_1^2+x_0^2+y_0^2<r_0^2)"></latex>
-                <p>Par extension, la probabilité d'avoir plus que 2, sera la volume d'une hypersphère en 4D divisé par le volume d'un hypercube en 4D</p>
-                <p>Ainsi,</p>
-                <latex eq="Pr(S>n) = \frac{\text{Vol. } 2n \text{D sphere}}{\text{Vol. } 2n \text{D cube}}"></latex>
-                <p>Heureusement, nous avons des formules pour ces hypervolumes.</p>
-                <latex eq="(\text{Vol. } 2n \text{D sphere de rayon } r_0)=\frac{\pi^n r_0^{2n}}{n!}"></latex><br />
-                <latex eq="(\text{Vol. } 2n \text{D cube de cote 2}r_0)=(2r_0)^{2n}=4^nr_0^{2n}" bordered></latex>
-                <p>Et donc,</p>
-                <latex eq="Pr(S>n) = \frac{\pi^n r_0^{2n}}{n!}*\frac{1}{4^nr_0^{2n}}=\frac{\left(\frac{\pi}{4}\right)^n}{n!}"></latex>
-                <p>Ceux d'entre vous qui ont déjà fait des mathématiques, sont assez familiers avec le terme <latex eq="\frac{x^n}{n!}"></latex></p>
-                <p>Je sens votre fébrilité, nous y reviendrons bientôt...</p>
-                <p>On ajoutera aussi que</p>
-                <latex eq="Pr(S=n) = Pr(S>n-1) - Pr(S>n)"></latex>
-                <p>Revenons à notre calcul d'espérance</p>
-                <latex eq="E[S]=\sum_{n=0}^\infty n*Pr(S=n)"></latex><br>
-                <latex eq="=\sum_{n=1}^\infty n*Pr(S>n-1) - \sum_{n=1}^\infty n*Pr(S>n)"></latex><br>
-                <latex eq="=Pr(S>0) + 2Pr(S>1) + ... - Pr(S>1) - 2Pr(S>2) - ..."></latex><br>
-                <latex eq="=\sum_{n=0}^\infty Pr(S>n)"></latex><br>
-                <latex eq="=\sum_{n=0}^\infty \frac{\left(\frac{\pi}{4}\right)^n}{n!}"></latex><br>
-                <p>Wow! On a finalement notre réponse</p>
-                <latex eq="E[S]=e^{\pi/4}" :big="true"></latex>
-        </section>
-        <section id="analyse">
-            <h2>L'analyse</h2>
-            <p>Il est très interessant de voir qu'un problème géométrique en 2D, peut être résolu avec des formules de volumes en dimensions supérieures.</p>
-            <p>Aussi intéressant de noter que le ratio du volume d'une hypersphère par rapport à son hypercube tend vers 0.</p>
-            <p>ie, plus la dimension augmente plus la "sphère" devient petite par rapport au cube.</p>
-        </section>
-        <section id="simulation">
-          <h2>La simulation</h2>
-          <p>Utiliser la simulation ci-bas pour essayer de jouer au jeu.</p>
-          <p>Aussi observez que plus le nombre d'essais augmentera, plus le score moyen devrait tendre vers <latex eq="e^{\pi/4}\approx 2.19328"></latex></p>
-          <cible :show-stats="true" :show-controls="true"></cible>
-        </section>
->>>>>>> 0ba903a46494b51b7e5043b9896b5b4d83044cbd
       </div>
       <a id="goToTop" href="#top">Top ↑</a>
       <section id="mise-en-place">
@@ -271,25 +150,10 @@
       template: '<img :height="big ? \'40px\' : \'100%\'" :src="\'https://latex.codecogs.com/svg.latex?\' + eq" :title="eq" />'
     })
 
-<<<<<<< HEAD
     Vue.component("cible", {
       props: {
         initialRadius: {
           default: 300
-=======
-      Vue.component("cible", {
-        props: {
-          initialRadius: {
-            default: 250
-          },
-          dartsToShootOnCreation: {
-            default: function() {
-              return [];
-            }
-          },
-          showControls: { default: false },
-          showStats: { default: false }
->>>>>>> 0ba903a46494b51b7e5043b9896b5b4d83044cbd
         },
         dartsToShootOnCreation: {
           default: function () {
