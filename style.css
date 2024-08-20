@@ -3,11 +3,39 @@ body {
   padding: 50px;
   background-color: #fcfcfc;
 }
+
+@media only screen and (max-width: 400px) {
+  body {
+    padding: 5px;
+  }
+
+
+}
+
+@media only screen and (max-width: 700px) {
+  .flex.md-column {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 1060px) {
+  .flex.lg-column {
+    flex-direction: column;
+  }
+}
+
 .flex {
   display: flex;
 }
-section {
+
+.mb {
+  margin-bottom: 1em
 }
+
+.mr {
+  margin-right: .5em;
+}
+
 svg {
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
@@ -21,9 +49,11 @@ svg {
 .dartArea {
   stroke-width: 0;
 }
+
 .dartArea.initial {
   fill: rgba(250, 177, 177, 0.2);
 }
+
 .dartArea.current {
   fill: rgba(143, 127, 231, 0.226);
 }
@@ -35,6 +65,7 @@ svg {
 .dart.hit {
   fill: rgb(0, 255, 0);
 }
+
 .btn {
   border: 1px solid #aaa;
   background-color: white;
@@ -44,6 +75,7 @@ svg {
   margin-right: 10px;
   margin-bottom: 10px;
 }
+
 .btn:hover {
   background-color: rgb(243, 241, 255);
 }
@@ -52,27 +84,32 @@ svg {
   border-collapse: collapse;
   margin: auto;
 }
+
 .scores td {
   padding: 5px;
   min-width: 75px;
   text-align: center;
 }
+
 #goToTop {
   position: fixed;
   bottom: 15px;
   right: 15px;
 }
+
 .links {
   background-color: #f2f2f2;
   padding: 20px;
   border-radius: 5px;
 }
+
 a {
   text-decoration: none;
   display: inline-block;
   padding: 8px 10px;
   color: black;
 }
+
 a:hover {
   border-bottom: 2px solid black;
   padding-bottom: 6px;

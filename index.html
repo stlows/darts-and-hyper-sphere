@@ -51,17 +51,11 @@
         <div v-for="example in examples">
           <p>{{example.label}}</p>
 
-          <div class="flex">
-            <table>
-              <tr>
-                <td v-for="n in example.darts.length">
-                  <cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, n)"></cible>
-                </td>
-              </tr>
-              <tr>
-                <td v-for="(dart, index) in example.darts"><i>Lancer {{ index + 1 }}</i></td>
-              </tr>
-            </table>
+          <div class="flex md-column">
+            <div v-for="(dart, index) in example.darts" class="mb mr">
+              <cible :initial-radius="100" :darts-to-shoot-on-creation="example.darts.slice(0, index + 1)"></cible>
+              <i>Lancer {{ index + 1 }}</i>
+            </div>
           </div>
           <hr style="opacity: 0.2;" />
         </div>
@@ -138,7 +132,7 @@
         <p>Aussi observez que plus le nombre d'essais augmentera, plus le score moyen devrait tendre vers <latex eq="e^{\pi/4}\approx 2.19328">
           </latex>
         </p>
-        <cible :show-stats="true" :show-controls="true"></cible>
+        <cible :show-stats="true" :show-controls="true" :initial-radius="200"></cible>
       </section>
     </div>
   </div>
@@ -255,7 +249,7 @@
         '<div v-if="showControls">' +
         '<button v-for="n in [1,1000,10000,100000]" @click="shootDartLoop(n)" class="btn">Lancer {{n}} dart</button>' +
         "</div>" +
-        "<div class='flex flex-center'>" +
+        "<div class='flex flex-center lg-column'>" +
         '<svg :width="initialRadius * 2" :height="initialRadius * 2">' +
         '<circle class="dartArea initial" :cx="initialRadius" :cy="initialRadius" :r="initialRadius" />' +
         '<circle class="dartArea current" :cx="initialRadius" :cy="initialRadius" :r="currentRadius" />' +
